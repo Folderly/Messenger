@@ -1,30 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view />
+
+  <LoadingPage />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { defineComponent, onMounted } from "vue";
+import { useStore } from "./store";
+import LoadingPage from "./components/common/LoadingPage.vue";
 
-nav {
-  padding: 30px;
-}
+export default defineComponent({
+  components: {
+    LoadingPage,
+  },
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  setup() {
+    const store = useStore();
 
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    onMounted(async () => {
+      store.$patch({ loading: true });
+      try {
+        await Promise.all([store.fetchCurrentUser(), store.fetchContacts()]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        store.$patch({ loading: false });
+      }
+    });
+  },
+});
+</script>
+
+<style lang="scss"></style>
