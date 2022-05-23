@@ -69,5 +69,4 @@ jobs:
             --region us-central1 \
             --image "$GCP_IMAGE_DESTINATION" \
             --platform "managed" \
-            --port 8000 \
             --quiet
