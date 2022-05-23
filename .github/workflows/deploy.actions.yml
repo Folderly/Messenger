@@ -15,7 +15,7 @@ on:
         default: false
 
 jobs:
-  env:
+  display-env:
     - run: env
     - run: github
 
