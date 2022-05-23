@@ -24,14 +24,20 @@
             </Transition>
           </div>
           <div
-            class="box leading-relaxed bg-theme-1 text-opacity-80 text-white px-4 py-3 mt-3"
+            class="box leading-relaxed px-4 py-3 mt-3"
+            :class="{
+              'bg-theme-1 text-opacity-80 text-white': isPlain,
+            }"
           >
-            <slot></slot>
+            <div v-if="isPlain">
+              {{ body }}
+            </div>
+            <iframe v-else :srcdoc="body" @load="onIframeLoad" />
           </div>
         </div>
       </div>
       <div class="clear-both mb-2"></div>
-      <div class="text-gray-600 text-xs text-right">{{ messageDate }}</div>
+      <div class="text-gray-600 text-xs text-right">{{ date }}</div>
     </div>
     <div
       class="chat-text-box__photo w-10 h-10 hidden sm:block flex-none image-fit relative ml-4"
@@ -52,8 +58,18 @@ export default defineComponent({
   name: "ToMessage",
 
   props: {
-    messageDate: String,
-    default: () => "",
+    date: {
+      type: String,
+      default: "",
+    },
+    body: {
+      type: String,
+      default: "",
+    },
+    isPlain: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   setup(_, { emit }) {
@@ -63,9 +79,15 @@ export default defineComponent({
       emit("delete");
     }
 
+    function onIframeLoad(event: Event) {
+      emit("onIframeLoad", event);
+    }
+
     return {
       showDropdown,
+
       deleteMessage,
+      onIframeLoad,
     };
   },
 });

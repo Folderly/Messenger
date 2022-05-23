@@ -15,22 +15,44 @@
 
         <div class="ml-2 overflow-hidden">
           <div
-            class="font-medium w-28 truncate text-gray-800 dark:text-white"
-            :class="{ 'text-white': isChosenContact }"
+            class="font-medium w-28 truncate dark:text-white"
+            :class="{
+              'text-white': isChosenContact,
+              'text-gray-800': !isChosenContact,
+            }"
           >
             {{ contact.name || contact.email }}
           </div>
+
           <div
-            class="text-opacity-80 w-4/5 truncate mt-0.5 text-gray-800 dark:text-white"
-            :class="{ 'text-white': isChosenContact }"
+            v-if="isPlainMessage"
+            class="text-opacity-80 w-4/5 truncate mt-0.5 dark:text-white"
+            :class="{
+              'text-white': isChosenContact,
+              'text-gray-800': !isChosenContact,
+            }"
           >
-            {{ contact.lastMessage.body }}
+            <span>{{ contact.lastMessage.body }}</span>
           </div>
+
+          <span
+            v-else
+            class="label truncate text-gray-700 mt-1"
+            :class="{
+              'label-light': !isChosenContact,
+              'label-dark text-gray-300': isChosenContact,
+            }"
+            >html content</span
+          >
         </div>
+
         <div class="flex flex-col message-time">
           <div
-            class="whitespace-nowrap text-opacity-80 text-xs text-gray-800 dark:text-white"
-            :class="{ 'text-white': isChosenContact }"
+            class="whitespace-nowrap text-opacity-80 text-xs dark:text-white"
+            :class="{
+              'text-white': isChosenContact,
+              'text-gray-800': !isChosenContact,
+            }"
           >
             {{ messageTime }}
           </div>
@@ -45,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { Contact } from "@/types/chat";
+import { Contact, ContentType } from "@/types/chat";
 import { computed, defineComponent, PropType } from "vue";
 import { useStore } from "@/store";
 import { isEqual } from "lodash";
@@ -72,21 +94,44 @@ export default defineComponent({
       return null;
     });
 
-    const isChosenContact = computed(() =>
-      isEqual(store.selectedContact, props.contact)
+    const isChosenContact = computed(() => {
+      return isEqual(store.selectedContact, props.contact);
+    });
+
+    const isPlainMessage = computed(
+      () => props.contact?.lastMessage.contentType === ContentType.Plain
     );
 
     return {
       messageTime,
+      isPlainMessage,
+
       isChosenContact,
     };
   },
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .message-time {
   flex: 1 0 auto;
   text-align: end;
+}
+
+.label {
+  border-radius: 10px;
+
+  padding: 2px 15px;
+
+  text-align: center;
+  font-size: 12px;
+
+  &-dark {
+    background-color: rgb(14, 108, 222);
+  }
+
+  &-light {
+    background-color: rgb(216, 234, 255);
+  }
 }
 </style>

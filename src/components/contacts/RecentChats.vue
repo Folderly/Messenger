@@ -1,11 +1,9 @@
 <template>
   <div
-    class="side-content col-span-12 xl:col-span-3 -mt-16 xl:mt-0 pt-20 xl:-mr-6 px-6 xl:pt-6 side-content--active flex-col overflow-hidden"
+    class="wrap side-content side-content--active flex-col overflow-hidden"
     data-content="chats"
   >
-    <div class="intro-y text-base font-medium leading-tight mt-3">
-      Recent Chats
-    </div>
+    <div class="intro-y text-base font-medium leading-tight">Recent Chats</div>
     <div class="intro-y overflow-y-auto scrollbar-hidden pt-2 mt-3 -mx-5 px-5">
       <div class="user-list">
         <ChatContact
@@ -24,7 +22,7 @@
 import ChatContact from "./ChatContact.vue";
 
 import { useStore } from "@/store";
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent } from "vue";
 import { Contact } from "@/types/chat";
 
 export default defineComponent({
@@ -54,7 +52,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.wrap {
+  flex: 1;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+}
+
 .contact + .contact {
   margin-top: 20px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar top-0 left-0 fixed w-full h-16" v-if="currentUser">
+  <div class="top-bar top-0 left-0 fixed w-full h-16">
     <div
       class="-intro-y top-bar__content bg-white border-theme-3 dark:bg-dark-2 dark:border-dark-2 border-b w-full h-full flex px-5"
     >
@@ -30,7 +30,7 @@ import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "TopPanel",
+  name: "TopBar",
 
   setup() {
     const router = useRouter();
@@ -40,6 +40,7 @@ export default defineComponent({
 
     function signOut() {
       router.push("sign-in");
+      store.logout();
     }
 
     return {

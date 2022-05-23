@@ -29,6 +29,9 @@ export default {
       () => store.selectedContact,
       async () => {
         await fetchMessages();
+      },
+      {
+        immediate: true,
       }
     );
 

@@ -1,7 +1,6 @@
 <template>
   <div
     class="intro-y box border border-theme-3 dark:bg-dark-2 dark:border-dark-2 flex items-center px-5 py-4"
-    v-if="selectedContact"
   >
     <div class="flex items-center mr-auto">
       <div class="w-12 h-12 flex-none image-fit mr-1">

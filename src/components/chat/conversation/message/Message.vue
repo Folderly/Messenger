@@ -2,25 +2,21 @@
   <div>
     <ToMessage
       v-if="message.to === selectedContact.email"
-      :messageDate="messageDate"
+      :date="messageDate"
+      :body="message.body"
+      :isPlain="isPlainMessage"
       @delete="deleteMessage"
-    >
-      <div v-if="isPlainMessage">
-        {{ message.body }}
-      </div>
-      <iframe v-else :srcdoc="message.body" @load="onIframeLoad" />
-    </ToMessage>
+      @onIframeLoad="onIframeLoad"
+    />
 
     <FromMessage
       v-if="message.from === selectedContact.email"
-      :messageDate="messageDate"
+      :date="messageDate"
+      :body="message.body"
+      :isPlain="isPlainMessage"
       @delete="deleteMessage"
-    >
-      <div v-if="isPlainMessage">
-        {{ message.body }}
-      </div>
-      <iframe v-else :srcdoc="message.body" @load="onIframeLoad" />
-    </FromMessage>
+      @onIframeLoad="onIframeLoad"
+    />
   </div>
 </template>
 
@@ -46,8 +42,10 @@ export default defineComponent({
   },
 
   props: {
-    message: Object as PropType<Message>,
-    default: null,
+    message: {
+      type: Object as PropType<Message>,
+      default: null,
+    },
   },
 
   setup(props) {
@@ -76,6 +74,20 @@ export default defineComponent({
       return DateUtils.formatDate(date, "hh:mm, dd LLL yyyy");
     });
 
+    async function deleteMessage() {
+      if (!props.message) return;
+
+      store.$patch({ loading: true });
+
+      try {
+        await store.deleteMessage(props.message);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        store.$patch({ loading: false });
+      }
+    }
+
     function onIframeLoad(event: Event) {
       const target = event.target as HTMLIFrameElement;
       if (!target) return;
@@ -89,20 +101,6 @@ export default defineComponent({
 
       const contentWidth = documentElement.scrollWidth;
       target.style.width = Math.min(MaxIframeSize.Width, contentWidth) + "px";
-    }
-
-    async function deleteMessage() {
-      if (!props.message) return;
-
-      store.$patch({ loading: true });
-
-      try {
-        await store.deleteMessage(props.message);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        store.$patch({ loading: false });
-      }
     }
 
     return {

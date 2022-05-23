@@ -1,51 +1,58 @@
 <template>
-  <div class="md:pl-16 pt-16">
-    <div
-      class="-mt-16 ml-auto xl:-ml-16 mr-auto xl:pl-16 pt-16 xl:h-screen w-auto sm:w-3/5 xl:w-auto grid grid-cols-12 gap-6"
-    >
-      <TopPanel />
+  <div class="xl:h-screen mr-auto ml-auto flex">
+    <TopPanel v-if="currentUser" />
 
-      <RecentChats />
+    <div class="main-content flex flex-1">
+      <RecentChats v-if="contacts" />
 
-      <div
-        class="chat-box border-theme-5 col-span-12 xl:col-span-6 flex flex-col overflow-hidden xl:border-l xl:border-r p-6"
-      >
-        <ContactInfo />
+      <Chat v-if="selectedContact" />
 
-        <Conversation />
-
-        <SendMessage />
-      </div>
+      <SelectChat v-if="contacts && !selectedContact" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import RecentChats from "./contacts-panel/RecentChats.vue";
-import ContactInfo from "./chat-panel/ContactInfo.vue";
-import Conversation from "./chat-panel/conversation-panel/Conversation.vue";
-import SendMessage from "./chat-panel/SendMessage.vue";
-import TopPanel from "./top-panel/TopPanel.vue";
-import { defineComponent, onMounted } from "vue";
+import RecentChats from "./contacts/RecentChats.vue";
+import TopPanel from "./top-bar/TopBar.vue";
+
+import Chat from "./chat/Chat.vue";
+import SelectChat from "./chat/SelectChat.vue";
+
+import { computed, defineComponent } from "vue";
 import { useStore } from "@/store";
 
 export default defineComponent({
   name: "MainPage",
 
   components: {
+    Chat,
     TopPanel,
     RecentChats,
-    ContactInfo,
-    SendMessage,
-    Conversation,
+    SelectChat,
   },
 
   setup() {
     const store = useStore();
 
-    onMounted(async () => {
-      await store.fetchCurrentUser();
-    });
+    const selectedContact = computed(() => store.selectedContact);
+    const contacts = computed(() => store.contacts);
+    const currentUser = computed(() => store.currentUser);
+
+    return {
+      selectedContact,
+      contacts,
+      currentUser,
+    };
   },
 });
 </script>
+
+<style scoped>
+.main-content {
+  margin-top: 64px;
+
+  margin-left: 150px;
+  margin-right: 150px;
+}
+</style>

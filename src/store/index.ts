@@ -7,7 +7,7 @@ import { remove } from "lodash";
 interface State {
   currentUser: CurrentUser | null;
   selectedContact: Contact | null;
-  contacts: Contact[];
+  contacts: Contact[] | null;
   messages: Message[];
 
   loading: boolean;
@@ -18,7 +18,7 @@ export const useStore = defineStore("main", {
     return {
       currentUser: null,
       selectedContact: null,
-      contacts: [],
+      contacts: null,
       messages: [],
 
       loading: false,
@@ -28,6 +28,10 @@ export const useStore = defineStore("main", {
   actions: {
     async signIn() {
       await AuthAPI.signIn();
+    },
+
+    logout() {
+      this.currentUser = null;
     },
 
     async fetchContacts() {

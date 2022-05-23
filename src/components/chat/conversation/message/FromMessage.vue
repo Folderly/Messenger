@@ -15,7 +15,10 @@
           <div
             class="box leading-relaxed dark:text-gray-300 text-gray-700 px-4 py-3 mt-3"
           >
-            <slot></slot>
+            <div v-if="isPlain">
+              {{ body }}
+            </div>
+            <iframe v-else :srcdoc="body" @load="onIframeLoad" />
           </div>
           <div class="hidden sm:block dropdown relative ml-3 mt-3">
             <img
@@ -39,7 +42,7 @@
         </div>
       </div>
       <div class="clear-both mb-2"></div>
-      <div class="text-gray-600 text-xs">{{ messageDate }}</div>
+      <div class="text-gray-600 text-xs">{{ date }}</div>
     </div>
   </div>
 </template>
@@ -51,15 +54,36 @@ export default defineComponent({
   name: "FromMessage",
 
   props: {
-    messageDate: String,
-    default: () => "",
+    date: {
+      type: String,
+      default: "",
+    },
+    body: {
+      type: String,
+      default: "",
+    },
+    isPlain: {
+      type: Boolean,
+      default: true,
+    },
   },
 
-  setup() {
+  setup(_, { emit }) {
     const showDropdown = ref(false);
+
+    function deleteMessage() {
+      emit("delete");
+    }
+
+    function onIframeLoad(event: Event) {
+      emit("onIframeLoad", event);
+    }
 
     return {
       showDropdown,
+
+      deleteMessage,
+      onIframeLoad,
     };
   },
 });
