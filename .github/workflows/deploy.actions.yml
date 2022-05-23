@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    if: github.event_name == 'build'
+    if: github.event.inputs.build == true
     runs-on: ubuntu-latest
     env:
       GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
