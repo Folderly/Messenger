@@ -15,11 +15,6 @@ on:
         default: false
 
 jobs:
-  display-env:
-    steps:
-      - run: env
-      - run: github
-
   build:
     if: ${{ github.event.inputs.build == true }}
     runs-on: ubuntu-latest
