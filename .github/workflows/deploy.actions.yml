@@ -9,7 +9,7 @@ on:
         default: "build"
       rollout:
         description: "Rollout"
-        required: true
+        required: false
         default: "rollout"
 
 jobs:
