@@ -14,22 +14,14 @@ on:
         type: boolean
         default: false
 
-jobs:
-  log-the-inputs:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo $BUILD
-          echo $ROLLOUT
-        env:
-          BUILD: ${{ github.event.inputs.build }}
-          ROLLOUT: ${{ github.event.inputs.rollout }}
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
 
+jobs:
   build:
     if: ${{ github.event.inputs.build == 'true' }}
     runs-on: ubuntu-latest
-    env:
-      GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
 
     permissions:
       contents: "read"
@@ -43,8 +35,38 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
+      - name: "Configure docker authentication"
+        run: gcloud auth configure-docker
 
-  # rollout:
-  #   needs: build
-  #   if: github.event_name == 'rollout'
-  #   runs-on: ubuntu-latest
+      - name: "Build docker image"
+        run: docker build --compress -t "$GCP_IMAGE_DESTINATION" .
+
+      - name: "Push docker image"
+        run: docker push "$GCP_IMAGE_DESTINATION"
+
+  rollout:
+    needs: build
+    if: ${{ github.event.inputs.rollout == 'true' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v0"
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Deploy to Cloud Run
+        run: |-
+          gcloud run deploy "$GCP_PROJECT_ID" \
+            --region us-central1 \
+            --image "$GCP_IMAGE_DESTINATION" \
+            --platform "managed" \
+            --quiet
