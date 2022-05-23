@@ -1,0 +1,38 @@
+name: Folderly Messenger Client
+
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: "Build"
+        required: true
+        default: "build"
+      rollout:
+        description: "Rollout"
+        required: true
+        default: "rollout"
+
+jobs:
+  build:
+    if: github.event_name == 'build'
+    runs-on: ubuntu-latest
+    env:
+      GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
+
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    steps:
+      - uses: actions/checkout@v3
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v0"
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+  rollout:
+    needs: build
+    if: github.event_name == 'rollout'
+    runs-on: ubuntu-latest
