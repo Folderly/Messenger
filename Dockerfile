@@ -10,5 +10,5 @@ FROM nginx:1.21.6-alpine as app
 
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE $PORT
 CMD ["nginx", "-g", "daemon off;"]
