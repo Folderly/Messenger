@@ -6,15 +6,15 @@ on:
       build:
         description: "Build"
         required: true
-        default: "build"
+        type: boolean
       rollout:
         description: "Rollout"
         required: false
-        default: "rollout"
+        type: boolean
 
 jobs:
   build:
-    if: github.event.inputs.job == 'build'
+    if: github.event_name == 'build'
     runs-on: ubuntu-latest
     env:
       GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
