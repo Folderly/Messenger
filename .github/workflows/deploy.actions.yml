@@ -16,11 +16,12 @@ on:
 
 jobs:
   display-env:
-    - run: env
-    - run: github
+    steps:
+      - run: env
+      - run: github
 
   build:
-    if: github.event.inputs.build == true
+    if: ${{ github.event.inputs.build == true }}
     runs-on: ubuntu-latest
     env:
       GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
