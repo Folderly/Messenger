@@ -7,12 +7,18 @@ on:
         description: "Build"
         required: true
         type: boolean
+        default: true
       rollout:
         description: "Rollout"
         required: false
         type: boolean
+        default: false
 
 jobs:
+  env:
+    - run: env
+    - run: github
+
   build:
     if: github.event.inputs.build == true
     runs-on: ubuntu-latest
