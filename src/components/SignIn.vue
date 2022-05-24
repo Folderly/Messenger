@@ -1,12 +1,21 @@
 <template>
-  <div class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center">
+  <div
+    class="wrap w-full min-h-screen p-5 md:p-20 flex items-center justify-center"
+  >
+    <div class="overlay"></div>
     <div class="intro-y auth">
       <div
-        class="intro-y text-gray-700 dark:text-gray-300 text-2xl font-medium text-center mt-16"
+        class="text-4xl font-bold mb-10 text-white"
+        style="text-align: center"
       >
-        Login to Your Account
+        Folderly Messenger
       </div>
       <div class="intro-y box px-5 py-8 mt-8">
+        <div
+          class="intro-y text-gray-700 dark:text-gray-300 text-xl font-small text-center mb-5"
+        >
+          Login to Your Account
+        </div>
         <div class="intro-y container">
           <div class="sign-in-btn" @click="signIn"></div>
         </div>
@@ -25,7 +34,25 @@ async function signIn() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.wrap {
+  background-image: url("~@/assets/images/sign-in.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 .sign-in-btn {
   margin: auto;
   width: 250px;

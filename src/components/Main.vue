@@ -19,7 +19,7 @@ import TopPanel from "./top-bar/TopBar.vue";
 import Chat from "./chat/Chat.vue";
 import SelectChat from "./chat/SelectChat.vue";
 
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import { useStore } from "@/store";
 
 export default defineComponent({
@@ -38,6 +38,17 @@ export default defineComponent({
     const selectedContact = computed(() => store.selectedContact);
     const contacts = computed(() => store.contacts);
     const currentUser = computed(() => store.currentUser);
+
+    onMounted(async () => {
+      store.$patch({ loading: true });
+      try {
+        await Promise.all([store.fetchCurrentUser(), store.fetchContacts()]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        store.$patch({ loading: false });
+      }
+    });
 
     return {
       selectedContact,
