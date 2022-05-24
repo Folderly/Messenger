@@ -23,13 +23,8 @@
               </div>
             </Transition>
           </div>
-          <div
-            class="box leading-relaxed px-4 py-3 mt-3"
-            :class="{
-              'bg-theme-1 text-opacity-80 text-white': isPlain,
-            }"
-          >
-            <div v-if="isPlain">
+          <div class="box leading-relaxed px-4 py-3 mt-3">
+            <div class="plain-body" v-if="isPlain">
               {{ body }}
             </div>
             <iframe v-else :srcdoc="body" @load="onIframeLoad" />
@@ -113,6 +108,10 @@ export default defineComponent({
 
   top: 10px;
   left: -160px;
+}
+
+.plain-body {
+  white-space: pre-wrap;
 }
 
 .fade {

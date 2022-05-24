@@ -3,7 +3,7 @@
     class="intro-y chat-input box border-theme-3 dark:bg-dark-2 dark:border-dark-2 border flex items-center px-5 py-4"
   >
     <textarea
-      class="form-control h-12 shadow-none resize-none border-transparent px-5 py-3 focus:shadow-none truncate mr-3 sm:mr-0"
+      class="form-control h-12 shadow-none resize-none border-transparent px-5 py-3 focus:shadow-none truncate mr-3"
       placeholder="Type your message..."
       v-model="message"
     ></textarea>
