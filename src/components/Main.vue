@@ -2,7 +2,7 @@
   <div class="xl:h-screen mr-auto ml-auto flex">
     <TopPanel v-if="currentUser" />
 
-    <div class="main-content flex flex-1">
+    <div class="main-content flex flex-1 w-full">
       <RecentChats v-if="contacts" />
 
       <Chat v-if="selectedContact" />
@@ -61,9 +61,9 @@ export default defineComponent({
 
 <style scoped>
 .main-content {
-  margin-top: 64px;
+  padding-top: 64px;
 
-  margin-left: 150px;
-  margin-right: 150px;
+  padding-left: 150px;
+  padding-right: 150px;
 }
 </style>
