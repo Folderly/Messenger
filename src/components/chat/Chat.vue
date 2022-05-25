@@ -27,7 +27,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .wrap {
-  flex: 2.5;
+  flex: 1 1 70%;
   padding: 2rem 1.5rem 2rem 1.5rem;
 }
 </style>

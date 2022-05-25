@@ -8,7 +8,7 @@
 
 <style lang="scss" scoped>
 .wrap {
-  flex: 2.5;
+  flex: 1 1 70%;
 }
 
 .text-wrap {

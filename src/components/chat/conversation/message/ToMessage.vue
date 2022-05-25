@@ -81,7 +81,7 @@ export default defineComponent({
       emit("onIframeLoad", event);
     }
 
-    onClickOutside(dropdown, (event) => (showDropdown.value = false));
+    onClickOutside(dropdown, () => (showDropdown.value = false));
 
     return {
       dropdown,

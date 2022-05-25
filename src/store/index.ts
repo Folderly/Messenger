@@ -31,6 +31,8 @@ export const useStore = defineStore("main", {
     },
 
     async signOut() {
+      await AuthAPI.signOut();
+
       this.currentUser = null;
     },
 
