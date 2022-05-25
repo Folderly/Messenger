@@ -6,4 +6,8 @@ export class AuthAPI {
 
     return redirectUrl;
   }
+
+  static async signOut() {
+    await axios.post("auth/sign-out");
+  }
 }

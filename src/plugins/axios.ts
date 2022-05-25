@@ -14,11 +14,11 @@ axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     const store = useStore();
 
     if (error.response.status === 401) {
-      store.logout();
+      await store.signOut();
       router.push("/sign-in");
     } else {
       return Promise.reject(error);

@@ -5,6 +5,7 @@ export namespace ISendMessage {
     to: string;
 
     threadId: string;
+    inReplyTo: string;
   }
 }
 

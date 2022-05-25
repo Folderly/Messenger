@@ -30,7 +30,7 @@ export const useStore = defineStore("main", {
       await AuthAPI.signIn();
     },
 
-    logout() {
+    async signOut() {
       this.currentUser = null;
     },
 
@@ -60,6 +60,7 @@ export const useStore = defineStore("main", {
         body: message,
         to: this.selectedContact.email,
         threadId: this.selectedContact.threadId,
+        inReplyTo: this.messages[this.messages.length - 1].id,
       });
 
       this.messages.push(newMessage);

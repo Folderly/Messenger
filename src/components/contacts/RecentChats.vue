@@ -9,7 +9,7 @@
         <ChatContact
           class="contact"
           v-for="(contact, index) in contacts"
-          :key="index"
+          :key="`${index}`"
           :contact="contact"
           @click="chooseContact(contact)"
         />

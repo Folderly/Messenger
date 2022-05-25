@@ -8,7 +8,7 @@ export interface Contact {
 
   threadId: string;
 
-  lastMessage: Message;
+  lastMessage: Message | null;
 }
 
 export interface Message {

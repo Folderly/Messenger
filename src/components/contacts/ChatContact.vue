@@ -36,7 +36,7 @@
           </div>
 
           <span
-            v-else
+            v-if="isHtmlMessage"
             class="label truncate text-gray-700 mt-1"
             :class="{
               'label-light': !isChosenContact,
@@ -44,6 +44,17 @@
             }"
             >html content</span
           >
+
+          <span
+            class="label truncate text-gray-700 mt-1"
+            v-if="!contact.lastMessage"
+            :class="{
+              'label-light': !isChosenContact,
+              'label-dark text-gray-300': isChosenContact,
+            }"
+          >
+            No messages in thread
+          </span>
         </div>
 
         <div class="flex flex-col message-time">
@@ -85,7 +96,7 @@ export default defineComponent({
     const store = useStore();
 
     const messageTime = computed(() => {
-      if (props.contact)
+      if (props.contact && props.contact.lastMessage)
         return DateUtils.formateNumberDate(
           props.contact.lastMessage.date,
           "hh:mm a"
@@ -99,12 +110,21 @@ export default defineComponent({
     });
 
     const isPlainMessage = computed(
-      () => props.contact?.lastMessage.contentType === ContentType.Plain
+      () =>
+        props.contact?.lastMessage &&
+        props.contact.lastMessage.contentType === ContentType.Plain
+    );
+
+    const isHtmlMessage = computed(
+      () =>
+        props.contact?.lastMessage &&
+        props.contact.lastMessage.contentType === ContentType.Html
     );
 
     return {
       messageTime,
       isPlainMessage,
+      isHtmlMessage,
 
       isChosenContact,
     };

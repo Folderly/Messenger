@@ -38,9 +38,18 @@ export default defineComponent({
 
     const currentUser = computed(() => store.currentUser);
 
-    function signOut() {
-      router.push("sign-in");
-      store.logout();
+    async function signOut() {
+      store.$patch({ loading: true });
+
+      try {
+        await store.signOut();
+
+        router.push("sign-in");
+      } catch (error) {
+        console.error(error);
+      } finally {
+        store.$patch({ loading: false });
+      }
     }
 
     return {

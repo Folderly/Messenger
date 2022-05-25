@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-y-scroll scrollbar-hidden pt-5 flex-1">
-    <div v-for="(message, index) in messages" :key="index">
+    <div v-for="(message, index) in messages" :key="`${index}`">
       <Message :message="message" />
     </div>
   </div>

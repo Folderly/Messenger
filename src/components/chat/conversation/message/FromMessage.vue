@@ -6,13 +6,13 @@
       :src="require('@/assets/images/icons8-test-account-80.png')"
     />
 
-    <div class="w-full">
+    <div>
       <div>
         <div class="flex items-center">
           <div
             class="box flex-1 leading-relaxed dark:text-gray-300 text-gray-700 px-4 py-3 mt-3"
           >
-            <div v-if="isPlain">
+            <div class="plain-body" v-if="isPlain">
               {{ body }}
             </div>
             <iframe v-else :srcdoc="body" @load="onIframeLoad" />
@@ -120,6 +120,10 @@ export default defineComponent({
 
   top: 10px;
   left: 15px;
+}
+
+.plain-body {
+  white-space: pre-wrap;
 }
 </style>
 
