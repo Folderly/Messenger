@@ -8,8 +8,8 @@
       <div class="user-list">
         <ChatContact
           class="contact"
-          v-for="(contact, index) in contacts"
-          :key="`${index}`"
+          v-for="contact in contacts"
+          :key="contact.threadId"
           :contact="contact"
           @click="chooseContact(contact)"
         />

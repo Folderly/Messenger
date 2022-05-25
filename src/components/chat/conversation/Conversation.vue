@@ -1,13 +1,18 @@
 <template>
-  <div class="overflow-y-scroll scrollbar-hidden pt-5 flex-1">
-    <div v-for="(message, index) in messages" :key="`${index}`">
-      <Message :message="message" />
+  <div
+    ref="conversation"
+    class="overflow-y-scroll scrollbar-hidden pt-5 flex-1"
+  >
+    <div ref="conversationContent">
+      <div v-for="message in messages" :key="message.id">
+        <Message :message="message" />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "@/store";
 import Message from "./message/Message.vue";
 
@@ -21,8 +26,21 @@ export default {
   setup() {
     const store = useStore();
 
+    const conversation = ref<HTMLElement | null>(null);
+    const conversationContent = ref<HTMLElement | null>(null);
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (conversation.value && conversationContent.value)
+        conversation.value.scrollTop = conversationContent.value.scrollHeight;
+    });
+
     const messages = computed(() => {
       return store.messages;
+    });
+
+    onMounted(() => {
+      if (conversationContent.value)
+        resizeObserver.observe(conversationContent.value);
     });
 
     watch(
@@ -49,6 +67,8 @@ export default {
 
     return {
       messages,
+      conversation,
+      conversationContent,
     };
   },
 };
