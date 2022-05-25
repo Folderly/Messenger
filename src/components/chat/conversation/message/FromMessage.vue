@@ -1,19 +1,16 @@
 <template>
-  <div class="-intro-x chat-text-box flex items-end float-left mb-4 message">
-    <div
-      class="chat-text-box__photo w-10 h-10 hidden sm:block flex-none image-fit relative mr-4"
-    >
-      <img
-        alt="Topson Messenger Tailwind HTML Admin Template"
-        class="rounded-full"
-        :src="require('@/assets/images/icons8-test-account-80.png')"
-      />
-    </div>
+  <div class="intro-x flex items-end mb-4 wrap-message">
+    <img
+      class="rounded-full w-10 h-10 sm:block image-fit relative mr-4"
+      alt="Topson Messenger Tailwind HTML Admin Template"
+      :src="require('@/assets/images/icons8-test-account-80.png')"
+    />
+
     <div class="w-full">
       <div>
-        <div class="chat-text-box__content flex items-center float-left">
+        <div class="flex items-center">
           <div
-            class="box leading-relaxed dark:text-gray-300 text-gray-700 px-4 py-3 mt-3"
+            class="box flex-1 leading-relaxed dark:text-gray-300 text-gray-700 px-4 py-3 mt-3"
           >
             <div v-if="isPlain">
               {{ body }}
@@ -22,17 +19,26 @@
           </div>
           <div class="hidden sm:block dropdown relative ml-3 mt-3">
             <img
-              class="w-4 h-4 dropdown-icon"
+              class="dropdown-icon"
               @click="showDropdown = !showDropdown"
               :src="require('@/assets/icons/dots.svg')"
             />
 
             <Transition name="fade">
-              <div class="dropdown-modal w-40" v-if="showDropdown">
+              <div
+                v-if="showDropdown"
+                ref="dropdown"
+                class="dropdown-modal w-40"
+              >
                 <div class="box dark:bg-dark-1 p-2">
                   <div
+                    @click="deleteMessage"
                     class="delete-btn flex items-center p-2 bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
                   >
+                    <img
+                      class="mr-2"
+                      :src="require('@/assets/icons/delete.svg')"
+                    />
                     Move to Trash
                   </div>
                 </div>
@@ -48,6 +54,7 @@
 </template>
 
 <script lang="ts">
+import { onClickOutside } from "@vueuse/core";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -70,6 +77,7 @@ export default defineComponent({
 
   setup(_, { emit }) {
     const showDropdown = ref(false);
+    const dropdown = ref<HTMLElement | null>();
 
     function deleteMessage() {
       emit("delete");
@@ -79,8 +87,11 @@ export default defineComponent({
       emit("onIframeLoad", event);
     }
 
+    onClickOutside(dropdown, (event) => (showDropdown.value = false));
+
     return {
       showDropdown,
+      dropdown,
 
       deleteMessage,
       onIframeLoad,
@@ -89,10 +100,9 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.message {
-  margin-left: auto;
-  margin-right: 0;
+<style lang="scss" scoped>
+.wrap-message {
+  max-width: 70%;
 }
 
 .delete-btn {
@@ -101,6 +111,7 @@ export default defineComponent({
 
 .dropdown-icon {
   position: relative;
+  cursor: pointer;
 }
 
 .dropdown-modal {
@@ -110,7 +121,9 @@ export default defineComponent({
   top: 10px;
   left: 15px;
 }
+</style>
 
+<style lang="scss">
 .fade {
   &-enter-from,
   &-leave-to {

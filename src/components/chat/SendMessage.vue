@@ -9,7 +9,7 @@
     ></textarea>
 
     <div
-      class="bg-theme-1 text-white w-8 h-8 sm:w-10 sm:h-10 block rounded-full flex-none flex items-center justify-center"
+      class="btn bg-theme-1 text-white w-8 h-8 sm:w-10 sm:h-10 block rounded-full flex-none flex items-center justify-center"
       @click="sendMessage"
     >
       <img class="w-8 h-5" :src="require('@/assets/icons/message.svg')" />
