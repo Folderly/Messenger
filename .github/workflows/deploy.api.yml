@@ -1,4 +1,4 @@
-name: Folderly Messenger Client
+name: Folderly Messenger Api
 
 on:
   workflow_dispatch:
@@ -17,6 +17,9 @@ on:
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_IMAGE_DESTINATION: ${{ secrets.GCP_IMAGE_DESTINATION }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  GOOGLE_REDIRECT_URL: ${{ secrets.GOOGLE_REDIRECT_URL }}
 
 jobs:
   build:
@@ -39,7 +42,12 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: "Build docker image"
-        run: docker build --compress -t "$GCP_IMAGE_DESTINATION" .
+        run: |-
+          docker build \
+            --build-arg GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" \
+            --build-arg GOOGLE_CLIENT_SECRET="$GOOGLE_CLIENT_SECRET" \
+            --build-arg GOOGLE_REDIRECT_URL="$GOOGLE_REDIRECT_URL" \
+            --compress -t "$GCP_IMAGE_DESTINATION" -f api/Dockerfile api
 
       - name: "Push docker image"
         run: docker push "$GCP_IMAGE_DESTINATION"
@@ -65,7 +73,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |-
-          gcloud run deploy "$GCP_PROJECT_ID-client" \
+          gcloud run deploy "$GCP_PROJECT_ID-api" \
             --region us-central1 \
             --image "$GCP_IMAGE_DESTINATION" \
             --platform "managed" \
