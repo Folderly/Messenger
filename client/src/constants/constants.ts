@@ -7,7 +7,7 @@ const Dev: IConstants = {
 };
 
 const Prod: IConstants = {
-  ApiUrl: "https://messenger-api.folderly.live",
+  ApiUrl: "https://api.folderlymessenger.com",
 };
 
 export const Constants: IConstants =

@@ -36,7 +36,7 @@ async function signIn() {
 
 <style lang="scss" scoped>
 .wrap {
-  background-image: url("~@/assets/images/sign-in.png");
+  background-image: url("~@/assets/images/sign-in-min.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
