@@ -12,7 +12,7 @@ import {
 import { Request } from 'express';
 import { CheckTokenInterceptor } from '../app/check-token.interceptor';
 import { ChatService } from './chat.service';
-import { IChatController } from './types/chat.controller.types';
+import { SendDTO } from './dto/send.dto';
 
 @UseInterceptors(CheckTokenInterceptor)
 @Controller('chat')
@@ -53,7 +53,7 @@ export class ChatController {
   async sendMessage(
     @Req() request: Request,
 
-    @Body() body: IChatController.SendMessage.Body,
+    @Body() body: SendDTO,
   ) {
     const refreshToken = request.cookies.token;
 
